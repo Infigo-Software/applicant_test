@@ -182,3 +182,23 @@ ALTER TABLE [dbo].[AspNetUserTokens]  WITH CHECK ADD  CONSTRAINT [FK_AspNetUserT
 GO
 ALTER TABLE [dbo].[AspNetUserTokens] CHECK CONSTRAINT [FK_AspNetUserTokens_AspNetUsers_UserId]
     GO
+
+
+
+/****** Object:  Table [dbo].[Comments]    Script Date: 3/9/2023 11:17:37 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Comments](
+	[id] [int] NOT NULL,
+	[user_id] [nvarchar](256) NOT NULL,
+	[topic_id] [int] NOT NULL,
+	[full_name] [varchar](255) NOT NULL,
+	[comment] [nvarchar](max) NOT NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+
