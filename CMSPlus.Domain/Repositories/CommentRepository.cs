@@ -11,7 +11,7 @@ public class CommentRepository : Repository<CommentEntity>, ICommentRepository
     {
     }
 
-    public async Task<IEnumerable<CommentEntity?>> GetByTopicId(int topicId)
+    public async Task<IEnumerable<CommentEntity?>?> GetByTopicId(int topicId)
     {
         var result = await _dbSet.SingleOrDefaultAsync(comments => comments.TopicId == topicId);
         return result as IEnumerable<CommentEntity?>;

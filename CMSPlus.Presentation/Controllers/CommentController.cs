@@ -8,9 +8,11 @@ using CMSPlus.Services.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using FluentValidation.AspNetCore;
+using Microsoft.Extensions.Primitives;
 
 namespace CMSPlus.Presentation.Controllers
 {
+    [Route("[Controller]/[Action]/{id?}")]
     public class CommentController : Controller
     {
         private readonly ICommentService _commentService;
@@ -24,20 +26,20 @@ namespace CMSPlus.Presentation.Controllers
             _createModelValidator = createModelValidator;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Comments(int topicId)
+
+        public async Task<IActionResult> All(int id)
         {
-            var comments = await _commentService.GetByTopicId(topicId);
+            var comments = await _commentService.GetByTopicId(id);
             if (comments == null)
             {
-                throw new ArgumentException($"Topic with id: {topicId} wasn't found!");
+                throw new ArgumentException($"Topic with id: {id} wasn't found!");
             }
 
             return (IActionResult)comments;
         }
         
         [HttpPost]
-        public async Task<IActionResult> Create(CommentCreateModel comm)
+        public async Task<IActionResult> Create(CommentCreateModel comm, string id)
         {
             var validationResult = await _createModelValidator.ValidateAsync(comm);
             if (!validationResult.IsValid)
@@ -48,7 +50,11 @@ namespace CMSPlus.Presentation.Controllers
             var commentEntity = _mapper.Map<CommentCreateModel, CommentEntity>(comm);
             await _commentService.Create(commentEntity);
 
-            return RedirectToAction("/topics");
+            var routeValues = new RouteValueDictionary {
+              { "systemname", id }
+            };
+
+            return RedirectToAction("Details", "Topic", routeValues);
         }
     }
 }

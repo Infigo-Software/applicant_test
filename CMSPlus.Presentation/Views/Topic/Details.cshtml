@@ -1,46 +1,49 @@
 ﻿@model CMSPlus.Domain.Models.TopicModels.TopicDetailsModel
+@using CMSPlus.Domain.Models.CommentModels
 
 @{
     ViewBag.Title = "Details";
     Layout = "_Layout";
 }
 <div class="container m-3">
-    <h1 class="row-12 text-black">@Model.Title</h1>
+    <h1 class="row-12 text-black">@ViewBag.Topic.Title</h1>
     <div class="row">
-        <p class="col-6 text-start text-black-50">Updated: @Model.UpdatedOnUtc</p>
-        <p class="col-6 text-end text-black-50">Created: @Model.CreatedOnUtc</p>
+        <p class="col-6 text-start text-black-50">Updated: @ViewBag.Topic.UpdatedOnUtc</p>
+        <p class="col-6 text-end text-black-50">Created: @ViewBag.Topic.CreatedOnUtc</p>
     </div>
-    <p class="row-12 text-black">@Html.Raw(Model.Body)</p>
+    <p class="row-12 text-black">@Html.Raw(@ViewBag.Topic.Body)</p>
     <div class="row">
-        <p class="col-12 text-black-50 text-end">System name: @Model.SystemName</p>
+        <p class="col-12 text-black-50 text-end">System name: @ViewBag.Topic.SystemName</p>
     </div>
 
 
     <div id="comments" class="comments-area">
         <h3 class="comments-title uppercase">
-            3 commments for “<span>Topic 1</span>”
+             commments for “<span>@ViewBag.Topic.Title</span>”
         </h3><ol class="comment-list">
 
-
-
-
-
-            <li class="comment even thread-even depth-1" id="li-comment-7">
-                <article id="comment-7" class="comment-inner">
-                    <div class="flex-row align-top">
-                        <div class="flex-col">
-                        </div><div class="flex-col flex-grow">
-                            <cite class="strong fn">maria</cite> <span class="says">says:</span><div class="comment-content"><p>Aceste bloguri sunt foarte utile…cand esti in pana de idei, cu un singur click se rezolva problema:)!multumiri</p></div><div class="comment-meta commentmetadata uppercase is-xsmall clear">
-                                <a href="https://www.lauraadamache.ro/bloguri-culinare-preferate#comment-7">
-                                    <time datetime="2013-11-24T10:15:15+02:00" class="pull-left">
-                                        24/11/2013 at 10:15 am
-                                    </time>
-                                </a>
+@*
+            @if(ViewBag.Comments != null)
+                @foreach (CommentModel comment in ViewBag.Comments)
+                {
+                    <li class="comment even thread-even depth-1" id="li-comment-7">
+                        <article id="comment-7" class="comment-inner">
+                            <div class="flex-row align-top">
+                                <div class="flex-col">
+                                </div><div class="flex-col flex-grow">
+                                    <cite class="strong fn">@comment.FullName</cite> 
+                                    <span class="says">says:</span><div class="comment-content"><p>@comment.Comment</p></div><div class="comment-meta commentmetadata uppercase is-xsmall clear">
+                                        <a href="#">
+                                            <time datetime="@comment.CreatedOnUtc" class="pull-left">
+                                                @comment.CreatedOnUtc.Value.ToLongDateString() at @comment.CreatedOnUtc.Value.ToLocalTime()
+                                            </time>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </article>
-            </li>
+                        </article>
+                    </li>
+                }*@
            
 
 
@@ -51,7 +54,7 @@
         <div id="respond" class="comment-respond">
             <h3 id="reply-title" class="comment-reply-title"> Write a comment <small><a rel="nofollow" id="cancel-comment-reply-link" href="/bloguri-culinare-preferate#respond" style="display:none;">Anulează răspunsul</a></small></h3>
             
-            <form action="/comment/create" method="POST" id="commentform" class="comment-form">
+            <form action="/comment/create/@ViewBag.Topic.SystemName" method="POST" id="commentform" class="comment-form">
                 <p class="comment-form-comment">
                     
                 <label for="comment"> Comment </label>
@@ -59,7 +62,7 @@
                
                 <label for="author">Full Name <span class="required">*</span></label> 
                 <input id="author" name="FullName" type="text" size="30" maxlength="245">
-                <input hidden name="TopicId" value="@Model.Id" type="text">
+                    <input hidden name="TopicId" value="@ViewBag.Topic.Id" type="text">
 
                 <input type="submit" id="submit" class="submit" value="Submit"> 
             </form>

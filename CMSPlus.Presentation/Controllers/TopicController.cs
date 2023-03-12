@@ -11,16 +11,18 @@ namespace CMSPlus.Presentation.Controllers;
 public class TopicController : Controller
 {
     private readonly ITopicService _topicService;
+    private readonly ICommentService _commentService;
     private readonly IMapper _mapper;
     private readonly IValidator<TopicEditModel> _editModelValidator;
     private readonly IValidator<TopicCreateModel> _createModelValidator;
 
-    public TopicController(ITopicService topicService,IMapper mapper, IValidator<TopicEditModel> editModelValidator, IValidator<TopicCreateModel> createModelValidator)
+    public TopicController(ITopicService topicService, ICommentService commentService, IMapper mapper, IValidator<TopicEditModel> editModelValidator, IValidator<TopicCreateModel> createModelValidator)
     {
         _topicService = topicService;
         _mapper = mapper;
         _editModelValidator = editModelValidator;
         _createModelValidator = createModelValidator;
+        _commentService = commentService;
     }
     
     public async Task<IActionResult> Index()
@@ -98,6 +100,7 @@ public class TopicController : Controller
         return RedirectToAction("Index");
     }
 
+    [HttpGet]
     public async Task<IActionResult> Details(string systemName)
     {
         var topic = await _topicService.GetBySystemName(systemName);
@@ -106,6 +109,9 @@ public class TopicController : Controller
             throw new ArgumentException($"Item with system name: {systemName} wasn't found!");
         }
         var topicDto = _mapper.Map<TopicEntity, TopicDetailsModel>(topic);
-        return View(topicDto);
+
+        ViewBag.Topic = topicDto;
+
+        return View();
     }
 }
