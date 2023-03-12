@@ -1,6 +1,8 @@
 using CMSPlus.Domain;
 using CMSPlus.Presentation.AutoMapperProfiles;
 using CMSPlus.Services;
+using CMSPlus.Domain.Interfaces;
+using CMSPlus.Domain.Repositories;
 
 namespace CMSPlus.Presentation;
 
@@ -22,7 +24,10 @@ public class Startup
         
         services.AddPresentation();
         services.AddAutoMapper();
-        
+
+        services.AddTransient<ICommentRepository, CommentRepository>();
+
+
         services.AddServices();
     }
 
