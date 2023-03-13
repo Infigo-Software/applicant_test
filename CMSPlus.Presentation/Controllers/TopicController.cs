@@ -2,6 +2,7 @@ using AutoMapper;
 using CMSPlus.Domain.Entities;
 using CMSPlus.Services.Interfaces;
 using CMSPlus.Domain.Models.TopicModels;
+using CMSPlus.Domain.Models.CommentModels;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
@@ -110,7 +111,18 @@ public class TopicController : Controller
         }
         var topicDto = _mapper.Map<TopicEntity, TopicDetailsModel>(topic);
 
+
+        var comments = await _commentService.GetByTopicId(topic.Id);
+        if (comments == null)
+        {
+            throw new ArgumentException($"Item with id: {topic.Id} wasn't found!");
+        }
+
+
         ViewBag.Topic = topicDto;
+        ViewBag.Comments = comments;
+        ViewBag.NrComments = comments.Count();
+
 
         return View();
     }

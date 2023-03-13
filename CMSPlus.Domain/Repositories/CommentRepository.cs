@@ -2,6 +2,8 @@
 using CMSPlus.Domain.Interfaces;
 using CMSPlus.Domain.Persistance;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CMSPlus.Domain.Repositories;
 
@@ -11,10 +13,11 @@ public class CommentRepository : Repository<CommentEntity>, ICommentRepository
     {
     }
 
-    public async Task<IEnumerable<CommentEntity?>?> GetByTopicId(int topicId)
+    public async Task<IEnumerable<CommentEntity?>> GetByTopicId(int topicId)
     {
-        var result = await _dbSet.SingleOrDefaultAsync(comments => comments.TopicId == topicId);
-        return result as IEnumerable<CommentEntity?>;
+        var result = await GetAll();
+
+        return result.Where(c => c.TopicId == topicId);
     }
 
     public Task<IEnumerable<CommentEntity?>> GetByTopicId(string topicId)
@@ -25,7 +28,7 @@ public class CommentRepository : Repository<CommentEntity>, ICommentRepository
 
     public async Task<IEnumerable<CommentEntity?>> GetByFullName(string fullName)
     {
-        var result = await _dbSet.SingleOrDefaultAsync(comments => comments.FullName == fullName);
+        var result = await _dbSet.FirstOrDefaultAsync(comments => comments.FullName == fullName);
         return result as IEnumerable<CommentEntity?>;
     }
 }

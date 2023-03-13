@@ -9,7 +9,7 @@ namespace CMSPlus.Domain.Repositories;
 
 public class Repository<T> : IRepository<T> where T: BaseEntity
 {
-    private readonly ApplicationDbContext _context;
+    public readonly ApplicationDbContext _context;
     protected IQueryable<T> _dbSet => _context.Set<T>();
     public Repository(ApplicationDbContext context)
     {

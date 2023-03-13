@@ -26,8 +26,8 @@ namespace CMSPlus.Presentation.Controllers
             _createModelValidator = createModelValidator;
         }
 
-
-        public async Task<IActionResult> All(int id)
+        [HttpGet]
+        public async Task<IEnumerable<CommentEntity?>> All(int id)
         {
             var comments = await _commentService.GetByTopicId(id);
             if (comments == null)
@@ -35,7 +35,7 @@ namespace CMSPlus.Presentation.Controllers
                 throw new ArgumentException($"Topic with id: {id} wasn't found!");
             }
 
-            return (IActionResult)comments;
+            return (IEnumerable<CommentEntity?>)comments;
         }
         
         [HttpPost]
